@@ -25,7 +25,9 @@ DIRS		:= $(dir $(OBJECTS))
 
 LIBFT       := ./libft
 
-LIBFTBUILD  := build/libs/libft.a
+LIBFTBUILD  := ./build/libs/libft.a
+
+LIBFTFLAGS  := -L./build/libs -lft -lm
 
 vpath %.h $(HEADER_DIRS)
 vpath %.c $(DIRS)
@@ -36,12 +38,13 @@ all: $(NAME)
 
 $(NAME): $(DIST) $(OBJECTS) $(LIBFTBUILD)
 	@printf "$(CURSIVE)$(GRAY) 	- Compiling $(NAME)... $(RESET)\n"
-	$(CC) $(IFLAGS) $(OBJECTS) -o $(NAME)
+	$(CC) $(IFLAGS) $(OBJECTS) $(LIBFTFLAGS) -o $(NAME)
 	@printf "$(GREEN)    - Executable ready.\n$(RESET)"
 
 $(LIBFTBUILD):
-	make -C libs/libft
-	ln -lv libs/libft/libft.a build/libs
+	make -C libs/libft libft.a
+#	ln -fsv libs/libft/libft.a build/libs
+	cp -v libs/libft/libft.a build/libs
 
 $(DIST)/%.o: %.c
 	$(CC) $(CFLAGS) $(IFLAGS) -c $< -o $@

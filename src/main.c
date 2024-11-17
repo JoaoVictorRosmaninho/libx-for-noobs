@@ -2,5 +2,8 @@
 
 
 int main(void) {
+
+    ft_printf("Ola mundo !!!\n");
+
     return 0;
 }
