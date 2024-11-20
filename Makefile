@@ -9,6 +9,7 @@ NAME        := nooblibx
 CC          := clang
 CFLAGS      := -Wall -Wextra -Werror
 GDBFLAGS    := -ggdb
+STD			:= -std=c23
 DIST        := build
 
 HEADERS     := $(wildcard includes/*.h)
@@ -18,6 +19,8 @@ HEADER_DIRS := $(dir $(HEADERS))
 IFLAGS		:= $(addprefix -I, $(HEADER_DIRS))
 
 SOURCES		:= $(wildcard src/*.c)
+SOURCES		+= $(wildcard src/buffer/*.c)
+SOURCES		+= $(wildcard src/window/*.c)
 
 OBJECTS		:= $(addprefix $(DIST)/, $(SOURCES:.c=.o))
 
@@ -27,7 +30,11 @@ LIBFT       := ./libft
 
 LIBFTBUILD  := ./build/libs/libft.a
 
-LIBFTFLAGS  := -L./build/libs -lft -lm
+LIBFTFLAGS  := -L./build/libs -lft
+
+EXTRALIBFLAGS := -lm -lX11
+
+
 
 vpath %.h $(HEADER_DIRS)
 vpath %.c $(DIRS)
@@ -38,7 +45,7 @@ all: $(NAME)
 
 $(NAME): $(DIST) $(OBJECTS) $(LIBFTBUILD)
 	@printf "$(CURSIVE)$(GRAY) 	- Compiling $(NAME)... $(RESET)\n"
-	$(CC) $(IFLAGS) $(OBJECTS) $(LIBFTFLAGS) -o $(NAME)
+	$(CC) $(OBJECTS) $(LIBFTFLAGS) $(EXTRALIBFLAGS) -o $(NAME)
 	@printf "$(GREEN)    - Executable ready.\n$(RESET)"
 
 $(LIBFTBUILD):
@@ -47,7 +54,7 @@ $(LIBFTBUILD):
 	cp -v libs/libft/libft.a build/libs
 
 $(DIST)/%.o: %.c
-	$(CC) $(CFLAGS) $(IFLAGS) -c $< -o $@
+	$(CC) $(STD) $(CFLAGS) $(IFLAGS) -c $< -o $@
 
 $(DIST):
 	@mkdir -p $(DIRS)
@@ -64,4 +71,6 @@ fclean: clean
 	make -C libs/libft fclean
 	@printf "$(YELLOW)    - Executable removed.$(RESET)\n"
 
+valgrind:
+	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes  ./$(NAME)
 re: fclean all
