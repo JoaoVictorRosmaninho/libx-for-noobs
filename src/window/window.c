@@ -22,12 +22,13 @@ size_t  create_window(size_t width, size_t height, t_coliseu* coliseu) {
 
     XSync(global_buffer.display, 0);   
   
-    return push_window(window);
+    return buffer_push_window(window);
+}
+
+uint8_t has_windows_oppened( void ) {
+    return global_buffer.size > 0;
 }
 
 size_t  close_window(size_t id) {
-   
-    (void) id;
-    
-    return deinit_buffer();
+    return buffer_remove_window(id);
 }

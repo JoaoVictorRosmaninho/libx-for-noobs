@@ -31,9 +31,9 @@ typedef enum {
 } BufferErro;
 
 /* Buffer API*/
-size_t      push_window( Window window );
+size_t      buffer_push_window( Window window );
 
-size_t      remove_window(size_t id);
+size_t      buffer_remove_window( size_t id );
 
 uint8_t     buffer_unitialized( void );
 
@@ -46,6 +46,7 @@ size_t      create_window(size_t width, size_t height, t_coliseu* coliseu);
 
 size_t      close_window(size_t id);
 
+uint8_t     has_windows_oppened( void );
 
 
 #endif

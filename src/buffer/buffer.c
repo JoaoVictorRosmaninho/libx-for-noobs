@@ -35,8 +35,21 @@ BufferErro deinit_buffer( void ) {
     return NO_ERRORS;
 }
 
-size_t push_window( Window window ) {
+size_t buffer_push_window( Window window ) {
+    
+    size_t id = global_buffer.size;
+    
     global_buffer.windows[global_buffer.size++] = window;
 
-    return global_buffer.size;
+    return id;
+}
+
+size_t buffer_remove_window( size_t id ) {
+    
+    XDestroyWindow(global_buffer.display, global_buffer.windows[id]);
+
+    for ( size_t index = id; index < 3; index++) global_buffer.windows[index] = global_buffer.windows[index + 1];
+
+    return  --global_buffer.size;
+
 }

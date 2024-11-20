@@ -1,8 +1,16 @@
 #include "noob_libx.h"
 
 int main(void) {
-    create_window(800, 400, NULL);
+    size_t id = create_window(200, 200, NULL);
 
-    close_window(0);
+    while( has_windows_oppened() ) {
+
+       sleep(3);
+
+       close_window(id);
+
+    }
+
+    deinit_buffer();
     return 0;
 }
